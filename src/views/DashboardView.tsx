@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FaClock, FaCog, FaTable, FaCheckCircle } from "react-icons/fa";
+import { Element } from "react-scroll";
 
 export default function DashboardView() {
   return (
@@ -25,7 +26,7 @@ export default function DashboardView() {
           estudiantes. sin conflictos, sin estrés.
         </motion.p>
         <motion.button
-          className="bg-white text-[#2B6CB0] font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-blue-100 transition-colors cursor-pointer"
+          className="bg-white text-[#2B6CB0] font-semibold px-8 py-3 rounded-full shadow-lg border-2 border-blue-500 hover:bg-blue-100 transition-colors cursor-pointer"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -68,46 +69,48 @@ export default function DashboardView() {
       </section>
 
       {/* BENEFICIOS */}
-      <section id="beneficios" className="py-15 px-6 text-center">
-        <h2 className="text-3xl font-bold mb-12 text-[#1A365D]">
-          Beneficios de usar Planify
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          {[
-            {
-              icon: <FaClock size={32} />,
-              title: "Ahorra tiempo",
-              desc: "Genera horarios en minutos.",
-            },
-            {
-              icon: <FaCog size={32} />,
-              title: "Evita conflictos",
-              desc: "Detecta choques de materias o profesores automáticamente.",
-            },
-            {
-              icon: <FaTable size={32} />,
-              title: "Flexible",
-              desc: "Se adapta a distintos programas académicos.",
-            },
-            {
-              icon: <FaCheckCircle size={32} />,
-              title: "Accesible",
-              desc: "Disponible desde cualquier dispositivo.",
-            },
-          ].map((benefit, index) => (
-            <motion.div
-              key={index}
-              className="bg-white rounded-2xl shadow-md p-8"
-              whileHover={{ y: -5 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="text-[#2B6CB0] mb-4">{benefit.icon}</div>
-              <h3 className="font-semibold text-lg mb-2">{benefit.title}</h3>
-              <p className="text-[#1E4E8C]">{benefit.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      <Element name="beneficios">
+        <section id="beneficios" className="py-15 px-6 text-center">
+          <h2 className="text-3xl font-bold mb-12 text-[#1A365D]">
+            Beneficios de usar Planify
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {[
+              {
+                icon: <FaClock size={32} />,
+                title: "Ahorra tiempo",
+                desc: "Genera horarios en minutos.",
+              },
+              {
+                icon: <FaCog size={32} />,
+                title: "Evita conflictos",
+                desc: "Detecta choques de materias o profesores automáticamente.",
+              },
+              {
+                icon: <FaTable size={32} />,
+                title: "Flexible",
+                desc: "Se adapta a distintos programas académicos.",
+              },
+              {
+                icon: <FaCheckCircle size={32} />,
+                title: "Accesible",
+                desc: "Disponible desde cualquier dispositivo.",
+              },
+            ].map((benefit, index) => (
+              <motion.div
+                key={index}
+                className="bg-white rounded-2xl shadow-md p-8"
+                whileHover={{ y: -5 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="text-[#2B6CB0] mb-4">{benefit.icon}</div>
+                <h3 className="font-semibold text-lg mb-2">{benefit.title}</h3>
+                <p className="text-[#1E4E8C]">{benefit.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+      </Element>
 
       {/* CTA FINAL */}
       <section className="pb-20 pt-10 px-6 text-[#1A365D] text-center">

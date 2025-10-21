@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 
 export default function Navbar() {
   return (
@@ -21,16 +22,19 @@ export default function Navbar() {
           </Link>
         </li>
         <li>
-          <Link
-            to="#beneficios"
-            className="text-white text-lg font-medium hover:border-2 rounded-full px-5 py-2"
+          <ScrollLink
+            to="beneficios"
+            smooth={true}
+            duration={600}
+            offset={-50} // ajusta si tu navbar tiene altura fija
+            className="text-white text-lg font-medium hover:border-2 rounded-full px-5 py-2 cursor-pointer"
           >
             Beneficios
-          </Link>
+          </ScrollLink>
         </li>
         <li>
           <Link
-            to="/iniciar-sesion"
+            to="/auth/login"
             className="bg-[#1E4E8C] border-2 border-[#1A365D] text-white px-5 py-2 rounded-full text-lg font-semibold hover:bg-[#1A365D] transition-colors"
           >
             Iniciar sesión
