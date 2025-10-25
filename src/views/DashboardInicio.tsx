@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { FaClock, FaCog, FaTable, FaCheckCircle } from "react-icons/fa";
 import { Element } from "react-scroll";
 
-export default function DashboardView() {
+export default function DashboardInicio() {
   return (
     <main className="bg-[#EAF3FF] ">
       {/* HERO */}

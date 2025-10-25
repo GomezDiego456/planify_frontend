@@ -1,21 +1,20 @@
 "use client";
 
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import type { UserLoginForm } from "@/types/index";
+import type { RequestConfirmationCodeForm } from "../../types";
 import ErrorMessage from "@/components/ErrorMessage";
-import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import { requestConfirmationCode } from "@/api/AuthApi";
 import { toast } from "react-toastify";
-import { authenticateUser } from "@/api/AuthApi";
-import { Mail, Lock, ArrowRight } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function LoginView() {
-  const navigate = useNavigate();
-  const initialValues: UserLoginForm = {
+export default function RequestNewCodeView() {
+  const initialValues: RequestConfirmationCodeForm = {
     email: "",
-    password: "",
   };
+
   const {
     register,
     handleSubmit,
@@ -23,19 +22,17 @@ export default function LoginView() {
   } = useForm({ defaultValues: initialValues });
 
   const { mutate } = useMutation({
-    mutationFn: authenticateUser,
+    mutationFn: requestConfirmationCode,
     onError: (error) => {
       toast.error(error.message);
     },
-    onSuccess: () => {
-      toast.success("Inicio de sesión exitoso");
-      navigate("/dashboard");
+    onSuccess: (data) => {
+      toast.success(data);
     },
   });
 
-  const handleLogin = (formData: UserLoginForm) => {
+  const handleRequestCode = (formData: RequestConfirmationCodeForm) =>
     mutate(formData);
-  };
 
   return (
     <div className="w-full max-w-md bg-white rounded-2xl shadow-xl mt-5 py-10 px-8">
@@ -45,14 +42,16 @@ export default function LoginView() {
         transition={{ duration: 0.5 }}
       >
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">Bienvenido</h1>
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">
+            Solicitar código
+          </h1>
           <p className="text-slate-600">
-            Inicia sesión en tu cuenta de Planify
+            Ingresa tu email para recibir un nuevo código de confirmación
           </p>
         </div>
 
         <form
-          onSubmit={handleSubmit(handleLogin)}
+          onSubmit={handleSubmit(handleRequestCode)}
           className="space-y-6"
           noValidate
         >
@@ -72,40 +71,16 @@ export default function LoginView() {
                 placeholder="tu@email.com"
                 className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                 {...register("email", {
-                  required: "El Email es obligatorio",
+                  required: "El email es obligatorio",
                   pattern: {
                     value: /\S+@\S+\.\S+/,
-                    message: "E-mail no válido",
+                    message: "Email no válido",
                   },
                 })}
               />
             </div>
             {errors.email && (
               <ErrorMessage>{errors.email.message}</ErrorMessage>
-            )}
-          </div>
-
-          {/* Password */}
-          <div className="space-y-2">
-            <label className="block text-sm font-semibold text-slate-900">
-              Contraseña
-            </label>
-            <div className="relative">
-              <Lock
-                className="absolute left-3 top-3.5 text-slate-400"
-                size={20}
-              />
-              <input
-                type="password"
-                placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                {...register("password", {
-                  required: "La contraseña es obligatoria",
-                })}
-              />
-            </div>
-            {errors.password && (
-              <ErrorMessage>{errors.password.message}</ErrorMessage>
             )}
           </div>
 
@@ -116,7 +91,7 @@ export default function LoginView() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            Iniciar Sesión
+            Enviar código
             <ArrowRight size={18} />
           </motion.button>
         </form>
@@ -124,20 +99,11 @@ export default function LoginView() {
         {/* Links */}
         <div className="mt-8 space-y-4">
           <Link
-            to="/auth/forgot-password"
+            to="/auth/login"
             className="block text-center text-blue-600 hover:text-blue-700 font-medium transition-colors"
           >
-            ¿Olvidaste tu contraseña?
+            Volver al inicio de sesión
           </Link>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-300"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-slate-600">O</span>
-            </div>
-          </div>
 
           <Link
             to="/auth/register"
