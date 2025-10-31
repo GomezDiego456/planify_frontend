@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 export default function AppLayoutInicio() {
   return (
     <>
-      <header className="bg-[#2B6CB0] py-5">
+      <header className="bg-[#1E4E8C] py-5">
         <div className="max-w-screen-2xl mx-auto flex flex-col lg:flex-row justify-between items-center px-10">
           <div className="w-64">
             <Logo />
@@ -19,7 +19,7 @@ export default function AppLayoutInicio() {
         </div>
       </header>
 
-      <section className="bg-[#EAF3FF] ">
+      <section>
         <Outlet />
       </section>
 

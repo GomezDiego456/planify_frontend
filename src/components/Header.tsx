@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Menu, X, LogOut } from "lucide-react";
 import Logo from "./Logo";
@@ -18,7 +16,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
   };
 
   return (
-    <header className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-4 md:px-6 py-4 shadow-lg flex justify-between items-center sticky top-0 z-40">
+    <header className="bg-[#1E4E8C] text-white px-4 md:px-6 py-4 shadow-lg flex justify-between items-center">
       <div className="flex items-center gap-3">
         <button
           onClick={handleMenuToggle}

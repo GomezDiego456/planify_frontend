@@ -8,9 +8,14 @@ import ConfirmAccountView from "./views/auth/ConfirmAccountView";
 import RequestNewCodeView from "./views/auth/RequestNewCodeView";
 import ForgotPasswordView from "./views/auth/ForgotPasswordView";
 import NewPasswordView from "./views/auth/NewPasswordView";
-import CreateProfesoresView from "./views/profesores/CreateProfesoresView";
-// import AppLayout from "./layouts/AppLayout";
+import CreateProfesorView from "./views/profesores/CreateProfesorView";
+import AppLayout from "./layouts/AppLayout";
 import Dashboard from "./views/Dashboard";
+import EditProfesorView from "./views/profesores/EditProfesorView";
+import CreateAsignaturaView from "./views/asignaturas/CreateAsignaturaView";
+import EditAsignaturaView from "./views/asignaturas/EditAsignatura.View";
+import CreateSalonView from "./views/salones/CreateSalonView";
+import EditSalonView from "./views/salones/EditSalonView";
 
 // import { useMutation } from "@tanstack/react-query";
 // import type { UserRegistrationForm } from "./types";
@@ -21,10 +26,11 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* diseño inicio */}
         <Route element={<AppLayoutInicio />}>
           <Route path="/" element={<DashboardInicio />} index />
         </Route>
-
+        {/* diseño auth */}
         <Route element={<AuthLayout />}>
           <Route path="/auth/login" element={<LoginView />} />
           <Route path="/auth/register" element={<RegisterView />} />
@@ -39,11 +45,29 @@ export default function Router() {
           />
           <Route path="/auth/new-password" element={<NewPasswordView />} />
         </Route>
+        {/* diseño app */}
+        <Route element={<AppLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          {/* profesores */}
+          <Route path="/profesores/create" element={<CreateProfesorView />} />
+          <Route
+            path="/profesores/:profesorId/edit"
+            element={<EditProfesorView />}
+          />
+          {/* asignaturas */}
+          <Route
+            path="/asignaturas/create"
+            element={<CreateAsignaturaView />}
+          />
+          <Route
+            path="/asignaturas/:asignaturaId/edit"
+            element={<EditAsignaturaView />}
+          />
 
-        {/* <Route element={<AppLayout />}> */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/profesores/create" element={<CreateProfesoresView />} />
-        {/* </Route> */}
+          {/* salones */}
+          <Route path="/salones/create" element={<CreateSalonView />} />
+          <Route path="/salones/:salonId/edit" element={<EditSalonView />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

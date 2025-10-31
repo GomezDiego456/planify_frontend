@@ -29,6 +29,7 @@ export default function ConfirmAccountView() {
 
   const handleComplete = (token: ConfirmToken["token"]) => {
     mutate({ token });
+    // console.log("Token completo:", token);
   };
 
   return (

@@ -2,7 +2,7 @@ import { FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 text-white py-12 mt-12">
+    <footer className="bg-slate-900 text-white py-12">
       <div className="max-w-screen-2xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 md:text-left">
         {/* Columna 1 */}
         <div className="md:text-left ">

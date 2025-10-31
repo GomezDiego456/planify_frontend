@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import { FaClock, FaCog, FaTable, FaCheckCircle } from "react-icons/fa";
 import { Element } from "react-scroll";
+import { Link } from "react-router-dom";
 
 export default function DashboardInicio() {
   return (
-    <main className="bg-[#EAF3FF] ">
+    <main>
       {/* HERO */}
       <section className="text-center py-20 px-6 bg-gradient-to-b text-[#1E4E8C]">
         <motion.h1
@@ -25,17 +26,16 @@ export default function DashboardInicio() {
           Genera automáticamente horarios académicos optimizados para docentes y
           estudiantes. sin conflictos, sin estrés.
         </motion.p>
-        <motion.button
+        <Link
+          to="/auth/login"
           className="bg-white text-[#2B6CB0] font-semibold px-8 py-3 rounded-full shadow-lg border-2 border-blue-500 hover:bg-blue-100 transition-colors cursor-pointer"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
         >
           Empezar ahora
-        </motion.button>
+        </Link>
       </section>
 
       {/* CÓMO FUNCIONA */}
-      <section className="bg-[#2B6CB0] py-20 px-6 mx-auto text-center">
+      <section className="bg-[#cadef8]  py-20 px-6 mx-auto text-center">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-[#1A365D]">
           {[
             {
@@ -119,9 +119,12 @@ export default function DashboardInicio() {
           Optimiza la creación de horarios y dedica más tiempo a lo que importa:
           enseñar y aprender.
         </p>
-        <button className="bg-white text-[#2B6CB0] font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-blue-100 transition-colors cursor-pointer">
+        <Link
+          className="bg-white text-[#2B6CB0] font-semibold px-8 py-3 rounded-full shadow-lg border-2 border-blue-500 hover:bg-blue-100 transition-colors cursor-pointer"
+          to="/auth/register"
+        >
           ¡Probar Planify!
-        </button>
+        </Link>
       </section>
     </main>
   );
