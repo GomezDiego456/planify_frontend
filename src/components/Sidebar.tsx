@@ -1,9 +1,17 @@
 "use client";
 
-import { Home, Users, BookOpen, Building2, Settings } from "lucide-react";
+import {
+  Home,
+  Users,
+  BookOpen,
+  Building2,
+  Settings,
+  Calendar,
+} from "lucide-react";
 
 const menuItems = [
   { icon: Home, label: "Panel principal", href: "/dashboard" },
+  { icon: Calendar, label: "Horarios", href: "/horarios" },
   { icon: Users, label: "Profesores", href: "/profesores/create" },
   { icon: BookOpen, label: "Asignaturas", href: "/asignaturas/create" },
   { icon: Building2, label: "Salones", href: "/salones/create" },

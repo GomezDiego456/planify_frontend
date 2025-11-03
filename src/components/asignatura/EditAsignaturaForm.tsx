@@ -47,7 +47,7 @@ export default function EditAsignaturaForm({
         queryKey: ["editAsignatura", asignaturaId],
       });
       toast.success(data);
-      navigate("/asignaturas");
+      navigate("/asignaturas/create");
     },
   });
 

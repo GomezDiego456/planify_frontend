@@ -16,6 +16,8 @@ import CreateAsignaturaView from "./views/asignaturas/CreateAsignaturaView";
 import EditAsignaturaView from "./views/asignaturas/EditAsignatura.View";
 import CreateSalonView from "./views/salones/CreateSalonView";
 import EditSalonView from "./views/salones/EditSalonView";
+import HorariosView from "./views/Horarios/HorariosView";
+import HorariosGeneradosView from "./views/Horarios/HorariosGeneradosView";
 
 // import { useMutation } from "@tanstack/react-query";
 // import type { UserRegistrationForm } from "./types";
@@ -48,6 +50,9 @@ export default function Router() {
         {/* diseño app */}
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          {/* horarios */}
+          <Route path="/horarios" element={<HorariosView />} />
+          <Route path="/horarios/view" element={<HorariosGeneradosView />} />
           {/* profesores */}
           <Route path="/profesores/create" element={<CreateProfesorView />} />
           <Route
