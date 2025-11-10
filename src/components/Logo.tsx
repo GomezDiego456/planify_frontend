@@ -19,6 +19,8 @@ export default function Logo({
       role="img"
       aria-label="Planify logo: calendario con engranaje"
     >
+      <title>Logotipo de Planify: calendario con engranaje</title>
+
       {/* 🔹 Eliminamos el espacio extra a la izquierda */}
       <g transform="translate(0,10)">
         <rect

@@ -20,8 +20,11 @@ const menuItems = [
 
 export default function Sidebar() {
   return (
-    <aside>
-      <nav className="p-6 space-y-2 sticky top-0 z-30">
+    <aside role="complementary">
+      <nav
+        className="p-6 space-y-2 sticky top-0 z-30"
+        aria-label="Menú lateral de navegación"
+      >
         {menuItems.map((item) => (
           <a
             key={item.label}

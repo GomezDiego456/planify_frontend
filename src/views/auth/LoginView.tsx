@@ -58,7 +58,10 @@ export default function LoginView() {
         >
           {/* Email */}
           <div className="space-y-2">
-            <label className="block text-sm font-semibold text-slate-900">
+            <label
+              htmlFor="email"
+              className="block text-sm font-semibold text-slate-900"
+            >
               Email
             </label>
             <div className="relative">
@@ -70,6 +73,7 @@ export default function LoginView() {
                 id="email"
                 type="email"
                 placeholder="tu@email.com"
+                aria-describedby="email-error"
                 className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                 {...register("email", {
                   required: "El Email es obligatorio",
@@ -87,7 +91,10 @@ export default function LoginView() {
 
           {/* Password */}
           <div className="space-y-2">
-            <label className="block text-sm font-semibold text-slate-900">
+            <label
+              htmlFor="password"
+              className="block text-sm font-semibold text-slate-900"
+            >
               Contraseña
             </label>
             <div className="relative">
@@ -96,6 +103,7 @@ export default function LoginView() {
                 size={20}
               />
               <input
+                id="password"
                 type="password"
                 placeholder="••••••••"
                 className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"

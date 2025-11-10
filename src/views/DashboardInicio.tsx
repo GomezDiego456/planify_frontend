@@ -35,21 +35,31 @@ export default function DashboardInicio() {
       </section>
 
       {/* CÓMO FUNCIONA */}
-      <section className="bg-[#cadef8]  py-20 px-6 mx-auto text-center">
+      <section
+        className="bg-[#cadef8] py-20 px-6 mx-auto text-center"
+        aria-labelledby="como-funciona-title"
+      >
+        <h2
+          id="como-funciona-title"
+          className="text-3xl font-bold text-[#1A365D] mb-12"
+        >
+          ¿Cómo funciona?
+        </h2>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-[#1A365D]">
           {[
             {
-              icon: <FaTable size={36} />,
+              icon: <FaTable size={36} aria-hidden="true" />,
               title: "1. Ingresa tus materias",
               desc: "Añade asignaturas, salones y profesores fácilmente.",
             },
             {
-              icon: <FaCog size={36} />,
+              icon: <FaCog size={36} aria-hidden="true" />,
               title: "2. Planify genera horarios",
               desc: "El sistema calcula automáticamente combinaciones óptimas.",
             },
             {
-              icon: <FaCheckCircle size={36} />,
+              icon: <FaCheckCircle size={36} aria-hidden="true" />,
               title: "3. Exporta y comparte",
               desc: "Visualiza y descarga los horarios sin conflictos.",
             },

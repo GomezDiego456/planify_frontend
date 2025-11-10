@@ -17,7 +17,10 @@ export default function Header({ onMenuToggle }: HeaderProps) {
   };
 
   return (
-    <header className="bg-[#1E4E8C] text-white px-4 md:px-6 py-4 shadow-lg flex justify-between items-center">
+    <header
+      className="bg-[#1E4E8C] text-white px-4 md:px-6 py-4 shadow-lg flex justify-between items-center"
+      role="banner"
+    >
       <div className="flex items-center gap-3">
         <button
           onClick={handleMenuToggle}

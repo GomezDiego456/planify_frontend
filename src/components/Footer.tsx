@@ -2,7 +2,7 @@ import { FaEnvelope, FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-900 text-white py-12">
+    <footer className="bg-slate-900 text-white py-12" role="contentinfo">
       <div className="max-w-screen-2xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 md:text-left">
         {/* Columna 1 */}
         <div className="md:text-left ">
@@ -43,6 +43,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-blue-400 transition-colors"
+              aria-label="Visitar mi perfil en GitHub"
             >
               <FaGithub size={26} />
             </a>
@@ -51,12 +52,14 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-blue-400 transition-colors"
+              aria-label="Visitar mi perfil en LinkedIn"
             >
               <FaLinkedin size={26} />
             </a>
             <a
               href="mailto:contact@planify.com"
               className="hover:text-blue-400 transition-colors"
+              aria-label="Enviar correo a contact@planify.com"
             >
               <FaEnvelope size={26} />
             </a>

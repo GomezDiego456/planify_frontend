@@ -3,7 +3,7 @@ import { Link as ScrollLink } from "react-scroll";
 
 export default function Navbar() {
   return (
-    <nav>
+    <nav aria-label="Menú principal de navegación">
       <ul className="flex items-center gap-6">
         <li>
           <Link
