@@ -109,3 +109,38 @@ export const dashboardSalonSchema = z.array(
     recursos: true,
   })
 );
+
+// -------------------- HORARIOS --------------------
+export const horarioItemSchema = z.object({
+  _id: z.string().optional(), // puede venir sin id si tu backend no lo retorna
+  dia: z.string(),
+  horaInicio: z.string(),
+  horaFin: z.string(),
+  asignatura: z.object({
+    _id: z.string(),
+    nombre: z.string(),
+  }),
+  profesor: z.object({
+    _id: z.string(),
+    nombreCompleto: z.string(),
+  }),
+  salon: z.object({
+    _id: z.string(),
+    nombre: z.string(),
+  }),
+});
+
+export const generatedHorarioSchema = z.array(horarioItemSchema);
+
+export type HorarioItem = z.infer<typeof horarioItemSchema>;
+export type HorarioGenerado = z.infer<typeof generatedHorarioSchema>;
+
+// -------------------- PAYLOAD GENERAR HORARIO --------------------
+export type GenerarHorarioPayload = {
+  horaInicio: string; // "07:00"
+  horaFin: string; // "18:00"
+  dias?: string[]; // opcional: ["Lunes","Martes",...]
+  asignaturas?: string[]; // opcional: ids de asignaturas
+  profesores?: string[]; // opcional: ids de profesores
+  salones?: string[]; // opcional: ids de salones
+};
