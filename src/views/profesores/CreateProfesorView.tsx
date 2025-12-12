@@ -4,9 +4,11 @@ import type { ProfesorFormData } from "@/types/index";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { createProfesor, deleteProfesor, getProfesor } from "@/api/ProfesorApi";
+import { getProfesoresRestringidos } from "@/api/DisponibilidadApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { Settings } from "lucide-react";
 import ProfesorForm from "@/components/profesor/ProfesorForm";
 
 export default function CreateProfesorView() {
@@ -15,7 +17,13 @@ export default function CreateProfesorView() {
   //Obtener profesores existentes
   const { data: profesores, isLoading } = useQuery({
     queryKey: ["profesores"],
-    queryFn: getProfesor, // ✅ Ejecutamos la función
+    queryFn: getProfesor,
+  });
+
+  // Obtener profesores con restricciones configuradas
+  const { data: profesoresRestringidos } = useQuery({
+    queryKey: ["profesoresRestringidos"],
+    queryFn: getProfesoresRestringidos,
   });
 
   const {
@@ -41,9 +49,8 @@ export default function CreateProfesorView() {
     onSuccess: (data) => {
       toast.success(data);
       reset();
-
-      // Refrescar la lista automáticamente
       queryClient.invalidateQueries({ queryKey: ["profesores"] });
+      queryClient.invalidateQueries({ queryKey: ["profesoresRestringidos"] });
     },
   });
 
@@ -56,11 +63,19 @@ export default function CreateProfesorView() {
     onSuccess: (data) => {
       toast.success(data);
       queryClient.invalidateQueries({ queryKey: ["profesores"] });
+      queryClient.invalidateQueries({ queryKey: ["profesoresRestringidos"] });
     },
   });
 
   const handleForm = (formData: ProfesorFormData) => {
     mutate(formData);
+  };
+
+  // Función para verificar si un profesor tiene restricciones configuradas
+  const tieneRestriccionesConfiguradas = (profesorId: string) => {
+    return profesoresRestringidos?.find(
+      (p) => p._id === profesorId && p.tieneDisponibilidad
+    );
   };
 
   if (isLoading) return <p>Cargando...</p>;
@@ -100,49 +115,72 @@ export default function CreateProfesorView() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {profesores.map((profesor) => (
-                  <tr
-                    key={profesor._id}
-                    className="hover:bg-gray-50 transition"
-                  >
-                    <td className="py-3 px-4 font-semibold text-slate-800">
-                      {profesor.nombreCompleto}
-                    </td>
-                    <td className="py-3 px-4 text-gray-600">
-                      {profesor.correo}
-                    </td>
-                    <td className="py-3 px-4 text-gray-500">
-                      {profesor.departamento || "Sin departamento"}
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <span
-                        className={`px-3 py-1 text-sm rounded-full ${
-                          profesor.disponible
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                        }`}
-                      >
-                        {profesor.disponible ? "Disponible" : "No disponible"}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-center flex justify-center gap-3">
-                      <Link
-                        to={`/profesores/${profesor._id}/edit`}
-                        className="text-blue-600 hover:text-blue-800 transition"
-                      >
-                        <FaEdit size={18} />
-                      </Link>
+                {profesores.map((profesor) => {
+                  const restricciones = tieneRestriccionesConfiguradas(
+                    profesor._id
+                  );
+                  const disponibilidadCompleta =
+                    profesor.disponible || restricciones;
 
-                      <button
-                        onClick={() => deleteMutate(profesor._id)}
-                        className="text-red-600 hover:text-red-800 transition cursor-pointer"
-                        title="Eliminar"
-                      >
-                        <FaTrash size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                  return (
+                    <tr
+                      key={profesor._id}
+                      className="hover:bg-gray-50 transition"
+                    >
+                      <td className="py-3 px-4 font-semibold text-slate-800">
+                        {profesor.nombreCompleto}
+                      </td>
+                      <td className="py-3 px-4 text-gray-600">
+                        {profesor.correo}
+                      </td>
+                      <td className="py-3 px-4 text-gray-500">
+                        {profesor.departamento || "Sin departamento"}
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <div className="flex flex-col items-center gap-1">
+                          <span
+                            className={`px-3 py-1 text-xs rounded-full ${
+                              disponibilidadCompleta
+                                ? "bg-green-100 text-green-700"
+                                : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {profesor.disponible
+                              ? "Disponible todos los días"
+                              : restricciones
+                              ? `${restricciones.bloques.length} bloques configurados`
+                              : "Sin configurar"}
+                          </span>
+                          {!profesor.disponible && !restricciones && (
+                            <Link
+                              to="/restricciones"
+                              className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-1"
+                            >
+                              <Settings size={12} />
+                              Configurar
+                            </Link>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-center flex justify-center gap-3">
+                        <Link
+                          to={`/profesores/${profesor._id}/edit`}
+                          className="text-blue-600 hover:text-blue-800 transition"
+                        >
+                          <FaEdit size={18} />
+                        </Link>
+
+                        <button
+                          onClick={() => deleteMutate(profesor._id)}
+                          className="text-red-600 hover:text-red-800 transition cursor-pointer"
+                          title="Eliminar"
+                        >
+                          <FaTrash size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

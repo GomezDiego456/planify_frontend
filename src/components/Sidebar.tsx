@@ -15,7 +15,7 @@ const menuItems = [
   { icon: Users, label: "Profesores", href: "/profesores/create" },
   { icon: BookOpen, label: "Asignaturas", href: "/asignaturas/create" },
   { icon: Building2, label: "Salones", href: "/salones/create" },
-  { icon: Settings, label: "Restricciones", href: "#" },
+  { icon: Settings, label: "Restricciones", href: "/restricciones" },
 ];
 
 export default function Sidebar() {

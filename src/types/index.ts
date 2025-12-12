@@ -144,3 +144,48 @@ export type GenerarHorarioPayload = {
   profesores?: string[]; // opcional: ids de profesores
   salones?: string[]; // opcional: ids de salones
 };
+
+// Agregar estos tipos al final de tu archivo types/index.ts
+
+// -------------------- DISPONIBILIDAD --------------------
+export const bloqueDisponibilidadSchema = z.object({
+  dia: z.enum(["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]),
+  horaInicio: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
+  horaFin: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/),
+});
+
+export const disponibilidadProfesorSchema = z.object({
+  _id: z.string().optional(),
+  profesor: z.union([
+    z.string(),
+    z.object({
+      _id: z.string(),
+      nombreCompleto: z.string(),
+      correo: z.string(),
+    }),
+  ]),
+  bloques: z.array(bloqueDisponibilidadSchema),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+});
+
+export const profesorRestringidoSchema = z.object({
+  _id: z.string(),
+  nombreCompleto: z.string(),
+  correo: z.string(),
+  departamento: z.string().optional(),
+  tieneDisponibilidad: z.boolean(),
+  bloques: z.array(bloqueDisponibilidadSchema),
+});
+
+export const profesoresRestringidosSchema = z.array(profesorRestringidoSchema);
+
+export type BloqueDisponibilidad = z.infer<typeof bloqueDisponibilidadSchema>;
+export type DisponibilidadProfesor = z.infer<
+  typeof disponibilidadProfesorSchema
+>;
+export type ProfesorRestringido = z.infer<typeof profesorRestringidoSchema>;
+
+export type DisponibilidadFormData = {
+  bloques: BloqueDisponibilidad[];
+};

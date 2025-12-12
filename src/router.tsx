@@ -17,6 +17,7 @@ import EditAsignaturaView from "./views/asignaturas/EditAsignatura.View";
 import CreateSalonView from "./views/salones/CreateSalonView";
 import EditSalonView from "./views/salones/EditSalonView";
 import GenerarHorarioView from "./views/Horarios/GenerarHorarioView";
+import RestriccionesView from "./views/restricciones/RestriccionesView";
 
 // import { useMutation } from "@tanstack/react-query";
 // import type { UserRegistrationForm } from "./types";
@@ -70,6 +71,9 @@ export default function Router() {
           {/* salones */}
           <Route path="/salones/create" element={<CreateSalonView />} />
           <Route path="/salones/:salonId/edit" element={<EditSalonView />} />
+
+          {/* restricciones */}
+          <Route path="/restricciones" element={<RestriccionesView />} />
         </Route>
       </Routes>
     </BrowserRouter>

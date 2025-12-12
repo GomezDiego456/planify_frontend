@@ -21,7 +21,6 @@ export default function EditProfesorForm({
     register,
     handleSubmit,
     formState: { errors },
-    // reset,
   } = useForm<ProfesorFormData>({
     defaultValues: {
       nombreCompleto: data.nombreCompleto,
@@ -41,6 +40,7 @@ export default function EditProfesorForm({
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["profesores"] });
       queryClient.invalidateQueries({ queryKey: ["editProfesor", profesorId] });
+      queryClient.invalidateQueries({ queryKey: ["profesoresRestringidos"] });
       toast.success(data);
       navigate("/profesores/create");
     },
@@ -53,6 +53,7 @@ export default function EditProfesorForm({
     };
     mutate(data);
   };
+
   return (
     <div className="my-10">
       <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-8">
@@ -122,25 +123,37 @@ export default function EditProfesorForm({
             />
           </div>
 
-          {/* Disponible */}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="disponible"
-              className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              {...register("disponible")}
-            />
-            <label htmlFor="disponible" className="text-slate-800 font-medium">
-              ¿Ya tiene disponibilidad configurada?
-            </label>
+          {/* Disponible - LABEL MEJORADO */}
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="disponible"
+                className="mt-1 h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                {...register("disponible")}
+              />
+              <div className="flex-1">
+                <label
+                  htmlFor="disponible"
+                  className="text-slate-800 font-semibold block mb-1 cursor-pointer"
+                >
+                  ✅ El profesor puede dar clases cualquier día
+                </label>
+                <p className="text-sm text-gray-600">
+                  Si NO marcas esta opción, deberás configurar los días y
+                  horarios específicos en la sección de{" "}
+                  <strong>Restricciones</strong>
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Botón */}
           <div className="text-center">
             <input
               type="submit"
-              value="Editar Profesor"
-              className="w-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg transition-all cursor-pointer"
+              value="Actualizar Profesor"
+              className="w-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 px-8 rounded-lg hover:shadow-lg transition-all cursor-pointer"
             />
           </div>
         </form>
