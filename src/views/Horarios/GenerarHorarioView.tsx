@@ -5,7 +5,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { generarHorario, eliminarHorario } from "@/api/HorarioApi";
 import type { GenerarHorarioPayload, HorarioItem } from "@/types/index";
 import { toast } from "react-toastify";
-import { Trash2, Play } from "lucide-react";
+import { Trash2, Play, FileDown, FileSpreadsheet } from "lucide-react";
+import {
+  exportarHorarioPorDiasPDF,
+  exportarHorarioTablaExcel,
+} from "@/utils/exportarHorario";
 
 const DIAS_SEMANA = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"];
 const COLORES_CLASE = [
@@ -27,7 +31,7 @@ export default function GenerarHorarioView() {
   const { data: horarios, isPending: loadingHorarios } = useQuery({
     queryKey: ["horario"],
     queryFn: async () => {
-      const res = await fetch("/api/horarios"); // tu endpoint real
+      const res = await fetch("/api/horarios");
       return res.json() as Promise<HorarioItem[]>;
     },
   });
@@ -37,7 +41,7 @@ export default function GenerarHorarioView() {
     mutationFn: (payload: GenerarHorarioPayload) => generarHorario(payload),
     onSuccess: (data) => {
       toast.success("Horario generado correctamente");
-      queryClient.setQueryData(["horario"], data); // actualizar caché
+      queryClient.setQueryData(["horario"], data);
     },
     onError: (err: unknown) => {
       const msg = (err as Error).message ?? "Error al generar horario";
@@ -51,7 +55,6 @@ export default function GenerarHorarioView() {
     onSuccess: () => {
       toast.success("Horario eliminado");
       queryClient.invalidateQueries({ queryKey: ["horario"] });
-      //recargar pagina
       window.location.reload();
     },
     onError: (err: unknown) => {
@@ -72,6 +75,34 @@ export default function GenerarHorarioView() {
     eliminarMutation.mutate();
   };
 
+  const handleExportarPDF = () => {
+    if (!horarios || horarios.length === 0) {
+      toast.warning("No hay horarios para exportar");
+      return;
+    }
+    try {
+      exportarHorarioPorDiasPDF(horarios);
+      toast.success("PDF generado correctamente");
+    } catch (error) {
+      toast.error("Error al generar PDF");
+      console.error(error);
+    }
+  };
+
+  const handleExportarExcel = () => {
+    if (!horarios || horarios.length === 0) {
+      toast.warning("No hay horarios para exportar");
+      return;
+    }
+    try {
+      exportarHorarioTablaExcel(horarios);
+      toast.success("Excel generado correctamente");
+    } catch (error) {
+      toast.error("Error al generar Excel");
+      console.error(error);
+    }
+  };
+
   const horariosPorDia = useMemo(() => {
     if (!horarios) return {};
     const agrupado: Record<string, HorarioItem[]> = {};
@@ -81,14 +112,14 @@ export default function GenerarHorarioView() {
     return agrupado;
   }, [horarios]);
 
-  const horasUnicas = useMemo(() => {
-    if (!horarios) return [];
-    const horas = new Set<string>();
-    horarios.forEach((item) => {
-      horas.add(item.horaInicio);
-    });
-    return Array.from(horas).sort();
-  }, [horarios]);
+  // const horasUnicas = useMemo(() => {
+  //   if (!horarios) return [];
+  //   const horas = new Set<string>();
+  //   horarios.forEach((item) => {
+  //     horas.add(item.horaInicio);
+  //   });
+  //   return Array.from(horas).sort();
+  // }, [horarios]);
 
   const obtenerColor = (index: number) =>
     COLORES_CLASE[index % COLORES_CLASE.length];
@@ -172,18 +203,29 @@ export default function GenerarHorarioView() {
                 }
               </p>
             </div>
-            <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg shadow">
+            {/* <div className="p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg shadow">
               <p className="text-gray-600 text-sm font-medium">Horas</p>
               <p className="text-2xl font-bold text-purple-600 mt-1">
                 {horasUnicas.length}
               </p>
-            </div>
+            </div> */}
             <div className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg shadow">
               <p className="text-gray-600 text-sm font-medium">Rango</p>
               <p className="text-lg font-bold text-orange-600 mt-1">
                 {horaInicio} - {horaFin}
               </p>
             </div>
+          </div>
+
+          {/* Botón de exportar a PDF */}
+          <div className="flex justify-end">
+            <button
+              onClick={handleExportarPDF}
+              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:shadow-lg transition-all text-white font-semibold py-3 px-6 rounded-lg flex items-center gap-2 cursor-pointer"
+            >
+              <FileDown size={18} />
+              Exportar a PDF
+            </button>
           </div>
 
           {/* Calendario por día */}
@@ -237,52 +279,65 @@ export default function GenerarHorarioView() {
             <summary className="cursor-pointer font-semibold text-gray-700 hover:text-gray-900 p-3 bg-gray-100 rounded-lg">
               📊 Vista detallada en tabla
             </summary>
-            <div className="mt-4 p-6 bg-white shadow-md rounded-lg border border-gray-200 overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="px-4 py-2 text-left font-semibold text-gray-700">
-                      Día
-                    </th>
-                    <th className="px-4 py-2 text-left font-semibold text-gray-700">
-                      Hora
-                    </th>
-                    <th className="px-4 py-2 text-left font-semibold text-gray-700">
-                      Asignatura
-                    </th>
-                    <th className="px-4 py-2 text-left font-semibold text-gray-700">
-                      Profesor
-                    </th>
-                    <th className="px-4 py-2 text-left font-semibold text-gray-700">
-                      Salón
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {horarios.map((item, index) => (
-                    <tr
-                      key={`${item.dia}-${item.horaInicio}-${item.horaFin}-${index}`}
-                      className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
-                    >
-                      <td className="px-4 py-3 text-gray-900 font-medium">
-                        {item.dia}
-                      </td>
-                      <td className="px-4 py-3 text-gray-600">
-                        {item.horaInicio} - {item.horaFin}
-                      </td>
-                      <td className="px-4 py-3 text-gray-900">
-                        {item.asignatura.nombre}
-                      </td>
-                      <td className="px-4 py-3 text-gray-600">
-                        {item.profesor.nombreCompleto}
-                      </td>
-                      <td className="px-4 py-3 font-semibold text-blue-600">
-                        {item.salon.nombre}
-                      </td>
+            <div className="mt-4 space-y-4">
+              {/* Botón de exportar a Excel */}
+              <div className="flex justify-end">
+                <button
+                  onClick={handleExportarExcel}
+                  className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:shadow-lg transition-all text-white font-semibold py-3 px-6 rounded-lg flex items-center gap-2 cursor-pointer"
+                >
+                  <FileSpreadsheet size={18} />
+                  Exportar a Excel
+                </button>
+              </div>
+
+              <div className="p-6 bg-white shadow-md rounded-lg border border-gray-200 overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                        Día
+                      </th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                        Hora
+                      </th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                        Asignatura
+                      </th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                        Profesor
+                      </th>
+                      <th className="px-4 py-2 text-left font-semibold text-gray-700">
+                        Salón
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {horarios.map((item, index) => (
+                      <tr
+                        key={`${item.dia}-${item.horaInicio}-${item.horaFin}-${index}`}
+                        className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                      >
+                        <td className="px-4 py-3 text-gray-900 font-medium">
+                          {item.dia}
+                        </td>
+                        <td className="px-4 py-3 text-gray-600">
+                          {item.horaInicio} - {item.horaFin}
+                        </td>
+                        <td className="px-4 py-3 text-gray-900">
+                          {item.asignatura.nombre}
+                        </td>
+                        <td className="px-4 py-3 text-gray-600">
+                          {item.profesor.nombreCompleto}
+                        </td>
+                        <td className="px-4 py-3 font-semibold text-blue-600">
+                          {item.salon.nombre}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </details>
         </div>
