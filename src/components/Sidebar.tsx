@@ -7,6 +7,7 @@ import {
   Building2,
   Settings,
   Calendar,
+  CreditCard,
 } from "lucide-react";
 
 const menuItems = [
@@ -16,6 +17,7 @@ const menuItems = [
   { icon: BookOpen, label: "Asignaturas", href: "/asignaturas/create" },
   { icon: Building2, label: "Salones", href: "/salones/create" },
   { icon: Settings, label: "Restricciones", href: "/restricciones" },
+  { icon: CreditCard, label: "Planes", href: "/planes" },
 ];
 
 export default function Sidebar() {
